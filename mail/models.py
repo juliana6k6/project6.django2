@@ -25,7 +25,32 @@ class Client(models.Model):
 
 class Mailing(models.Model):
     '''Настройки рассылки'''
+    STATUS_CHOICES = [
+        ('created', 'Создана'),
+        ('started', 'Запущена'),
+        ('finished', 'Завершена'),
+    ]
+
+    PERIOD_CHOICES = [
+        ('once', '1 раз'),
+        ('every_day', 'Ежедневно'),
+        ('every_week', 'Еженедельно'),
+        ('every_month', 'Ежемесячно'),
+    ]
     start_datetime_mailing = models.DateField(verbose_name='дата и время первой отправки рассылки',
                                               default=datetime.datetime.now())
+    stop_datetime_mailing = models.DateTimeField(verbose_name='дата и время последней отправки рассылки',
+                                                 default=datetime.datetime.now)
+    mailing_period = models.CharField(max_length=25, verbose_name='Периодичность рассылки', choices=PERIOD_CHOICES,
+                                      default='once')
+    mailing_status = models.CharField(max_length=25, verbose_name='Статус выполнения рассылки', choices=STATUS_CHOICES,
+                              default='created')
+
+    client = models.ManyToManyField(Client, verbose_name='Клиенты рассылки')
+    message = models.ForeignKey(Message, verbose_name='Сообщение', on_delete=models.CASCADE, **NULLABLE)
+
+
+
+
 
 
