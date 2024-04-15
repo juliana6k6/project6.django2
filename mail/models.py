@@ -23,6 +23,20 @@ class Client(models.Model):
         ordering = ('last_name', 'first_name', 'contact_email')
 
 
+class Message(models.Model):
+    """Сообщение рассылки"""
+    title = models.CharField(max_length=100, verbose_name='Тема письма', default='Без темы')
+    body = models.TextField(verbose_name='Основное содержание', **NULLABLE)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Сообщение'
+        verbose_name_plural = 'Сообщения'
+        ordering = ('title',)
+
+
 class Mailing(models.Model):
     '''Настройки рассылки'''
     STATUS_CHOICES = [
@@ -47,10 +61,39 @@ class Mailing(models.Model):
                               default='created')
 
     client = models.ManyToManyField(Client, verbose_name='Клиенты рассылки')
-    message = models.ForeignKey(Message, verbose_name='Сообщение', on_delete=models.CASCADE, **NULLABLE)
+    message = models.ForeignKey(Message, verbose_name='Сообщение рассылки', on_delete=models.CASCADE, **NULLABLE)
 
 
+def __str__(self):
+    return f'Начало рассылки {self.start_point}, период {self.period}, статус {self.status} '
 
+
+class Meta:
+    verbose_name = 'Рассылка'
+    verbose_name_plural = 'Рассылки'
+
+
+class Mail_attempt(models.Model):
+    """Попытка отправки рассылки"""
+
+    STATUS_CHOICES = [
+        ('Succes', 'Успешно'),
+        ('Non-succes', 'Неуспешно')
+    ]
+    attempt_time = models.DateTimeField(verbose_name='Дата и время последней попытки', **NULLABLE)
+    attempt_status = models.CharField(max_length=20, verbose_name='Статус попытки', choices=STATUS_CHOICES,
+                                      default='Succes')
+    server_response = models.TextField(verbose_name='Ответ почтового сервера', **NULLABLE)
+
+    mailing = models.ForeignKey(Mailing, verbose_name='Рассылка', on_delete=models.CASCADE, **NULLABLE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='клиент рассылки', **NULLABLE)
+
+    def __str__(self):
+        return f'Попытка отправки рассылки {self.attempt_time}, статус - {self.attempt_status}'
+
+    class Meta:
+        verbose_name = 'Попытка отправки рассылки'
+        verbose_name_plural = 'Попытка отправки рассылки'
 
 
 
