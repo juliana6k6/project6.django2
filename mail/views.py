@@ -1,9 +1,22 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, \
+    TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from mail.models import Mailing, Client, Message, Mail_attempt
 from blog.models import Post
 def index(request):
     return render(request, 'mail/index.html')
+
+
+class MailingListView(LoginRequiredMixin, ListView):
+    """Просмотр списка рассылок"""
+    model = Mailing
+
+
+class MailingDetailView(LoginRequiredMixin, DetailView):
+    """Просмотр рассылки по id"""
+    model = Mailing
 
 
 class MainPageView(TemplateView):

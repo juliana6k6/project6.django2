@@ -1,0 +1,38 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">
+                        Информация о рассылке: {{ object.name }}</h4>
+                </div>
+                <div class="card-body">
+                      <table class="table">
+                            <tr>
+                                <td>Сообщение: {{ object.message}</td>
+                             </tr>
+                             <tr>
+                                <td>Автор рассылки: {{ object.owner }}</td>
+                             </tr>
+                                <td> Отправлено с: {{ object.start_datetime_mailing }}</td>
+                              <tr>
+                                <td> Отправлено до: {{ object.stop_datetime_mailing }}</td>
+                              </tr>
+                             <tr>
+                                <td>Периодичность отправки: {{ object.mailing_period }}</td>
+                             </tr>
+                            <tr>
+                                <td>Статус рассылки: {{ object.mailing_status }}</td>
+                             </tr>
+                            <tr>
+                                <td>Клиенты рассылки: {{ object.clients }}</td>
+                             </tr>
+                        </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

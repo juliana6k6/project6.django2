@@ -51,23 +51,24 @@ class Mailing(models.Model):
         ('every_week', 'Еженедельно'),
         ('every_month', 'Ежемесячно'),
     ]
-    start_datetime_mailing = models.DateField(verbose_name='Дата и время первой отправки рассылки',
+    start_datetime_mailing = models.DateField(verbose_name='Дата и время начала отправки рассылки',
                                               default=datetime.datetime.now())
-    stop_datetime_mailing = models.DateTimeField(verbose_name='Дата и время последней отправки рассылки',
+    stop_datetime_mailing = models.DateTimeField(verbose_name='Дата и время окончания отправки рассылки',
                                                  default=datetime.datetime.now)
     mailing_period = models.CharField(max_length=25, verbose_name='Периодичность рассылки', choices=PERIOD_CHOICES,
                                       default='once')
     mailing_status = models.CharField(max_length=25, verbose_name='Статус выполнения рассылки', choices=STATUS_CHOICES,
                               default='created')
 
-    client = models.ManyToManyField(Client, verbose_name='Клиенты рассылки')
+    clients = models.ManyToManyField(Client, verbose_name='Клиенты рассылки')
     message = models.ForeignKey(Message, verbose_name='Сообщение рассылки', on_delete=models.CASCADE, **NULLABLE)
     name = models.CharField(max_length=100, verbose_name='Название рассылки', **NULLABLE)
     is_active = models.BooleanField(verbose_name='Активность рассылки', default=True)
 
 
 def __str__(self):
-    return self.name
+    return f'{self.name}, Начало {self.start_datetime_mailing}, повтор {self.mailing_period}, ' \
+           f'статус {self.mailing_status}'
 
 
 class Meta:

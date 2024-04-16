@@ -1,0 +1,26 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-3">
+            {% for object in object_list %}
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ object }}</h4>
+                </div>
+                <div class="card-body">
+
+                 <a class="p-2 btn btn-outline-primary" href='{% url "mailing:mailing_details" object.pk %}'>Подробнее
+                     {% if perms.catalog.set_published and perms.catalog.change_description and perms.catalog.change_category or user == object.owner %}
+                 <a class="p-2 btn btn-outline-primary" href='{% url "mailing:update_mailing" object.pk %}'>Редактировать
+                 <a class="p-2 btn btn-outline-primary" href='{% url "mailing:delete_mailing" object.pk %}'>Удалить
+                     {% endif %}
+                  </div>
+            </div>
+            {% endfor %}
+            <a class ="p-2 btn btn-outline-primary" href='{% url 'mail:mailing_create' %}'>Добавить рассылку</a>
+        </div>
+
+    </div>
+{% endblock %}
