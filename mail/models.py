@@ -51,9 +51,9 @@ class Mailing(models.Model):
         ('every_week', 'Еженедельно'),
         ('every_month', 'Ежемесячно'),
     ]
-    start_datetime_mailing = models.DateField(verbose_name='дата и время первой отправки рассылки',
+    start_datetime_mailing = models.DateField(verbose_name='Дата и время первой отправки рассылки',
                                               default=datetime.datetime.now())
-    stop_datetime_mailing = models.DateTimeField(verbose_name='дата и время последней отправки рассылки',
+    stop_datetime_mailing = models.DateTimeField(verbose_name='Дата и время последней отправки рассылки',
                                                  default=datetime.datetime.now)
     mailing_period = models.CharField(max_length=25, verbose_name='Периодичность рассылки', choices=PERIOD_CHOICES,
                                       default='once')
@@ -62,10 +62,12 @@ class Mailing(models.Model):
 
     client = models.ManyToManyField(Client, verbose_name='Клиенты рассылки')
     message = models.ForeignKey(Message, verbose_name='Сообщение рассылки', on_delete=models.CASCADE, **NULLABLE)
+    name = models.CharField(max_length=100, verbose_name='Название рассылки', **NULLABLE)
+    is_active = models.BooleanField(verbose_name='Активность рассылки', default=True)
 
 
 def __str__(self):
-    return f'Начало рассылки {self.start_point}, период {self.period}, статус {self.status} '
+    return self.name
 
 
 class Meta:
@@ -88,12 +90,13 @@ class Mail_attempt(models.Model):
     mailing = models.ForeignKey(Mailing, verbose_name='Рассылка', on_delete=models.CASCADE, **NULLABLE)
     client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='клиент рассылки', **NULLABLE)
 
+
     def __str__(self):
         return f'Попытка отправки рассылки {self.attempt_time}, статус - {self.attempt_status}'
 
     class Meta:
         verbose_name = 'Попытка отправки рассылки'
-        verbose_name_plural = 'Попытка отправки рассылки'
+        verbose_name_plural = 'Попытки отправки рассылки'
 
 
 
