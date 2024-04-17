@@ -1,4 +1,4 @@
-{% extends 'catalog/base.html' %}
+{% extends 'mail/base.html' %}
 {% load my_tags %}
 {% block content %}
 <div class="container">
@@ -13,8 +13,8 @@
 
                  <a class="p-2 btn btn-outline-primary" href='{% url "mailing:mailing_details" object.pk %}'>Подробнее
                      {% if perms.catalog.set_published and perms.catalog.change_description and perms.catalog.change_category or user == object.owner %}
-                 <a class="p-2 btn btn-outline-primary" href='{% url "mailing:update_mailing" object.pk %}'>Редактировать
-                 <a class="p-2 btn btn-outline-primary" href='{% url "mailing:delete_mailing" object.pk %}'>Удалить
+                 <a class="p-2 btn btn-outline-primary" href='{% url "mailing:mailing_update" object.pk %}'>Редактировать
+                 <a class="p-2 btn btn-outline-primary" href='{% url "mailing:mailing_delete" object.pk %}'>Удалить
                      {% endif %}
                   </div>
             </div>
