@@ -2,6 +2,8 @@
     <h5 class="my-0 mr-md-auto font-weight-normal">Мир рассылок/h5>
     <nav class="ms-5">
         <a class="p-2 btn btn-outline-primary" href="{% url 'mail:mailing_list' %}">Список рассылок</a>
+        <a class="p-2 btn btn-outline-primary" href="{% url 'mail:client_list' %}">Клиенты</a>
+        <a class="p-2 btn btn-outline-primary" href="{% url 'mail:message_list' %}">Сообщения</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'mail:main_page' %}">Главная</a>
         {% if user.is_authenticated %}
         <a class="p-2 btn btn-outline-primary" href="{% url 'users:logout' %}">Выход</a>

@@ -4,9 +4,9 @@ from django.shortcuts import render
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, \
     TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from mail.models import Mailing, Client, Message, Mail_attempt
+from mail.models import Mailing, Client, Message, MailAttempt
 from blog.models import Post
-from mail.forms import MailingForm
+from mail.forms import MailingForm, ClientForm
 from django.urls import reverse_lazy, reverse
 def index(request):
     return render(request, 'mail/index.html')
@@ -54,9 +54,82 @@ class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
     success_url = reverse_lazy('mail:mailing_list')
 
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        user = self.request.user
+        if user.is_superuser:
+            return self.object
+        if user != self.object.author:
+            raise Http404("Вы можете удалить только свою подписку")
+        return self.object
+
+class ClientListView(LoginRequiredMixin, ListView):
+    """Просмотр списка клиентов"""
+    model = Client
+
+class ClientCreateView(LoginRequiredMixin, CreateView):
+    """Создание нового клиента"""
+    model = Client
+    form_class = ClientForm
+    success_url = reverse_lazy('mailing:client_list')
+
+class ClientUpdateView(LoginRequiredMixin, UpdateView):
+    """Редактирование клиента"""
+    model = Client
+    form_class = ClientForm
+    success_url = reverse_lazy('mailing:client_list')
+
+  def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        user = self.request.user
+        if user.groups.filter(name='Модератор').exists() or user.is_superuser:
+            return self.object
+        if user != self.object.author:
+            raise Http404("Вы можете редактировать только своих клиентов")
+        return self.object
+
+  class ClientDeleteView(LoginRequiredMixin, DeleteView):
+      """Удаление клиента"""
+
+        model = Client
+        success_url = reverse_lazy('mail:client_list')
+
+        def get_object(self, queryset=None):
+            self.object = super().get_object(queryset)
+            user = self.request.user
+            if user.is_superuser:
+                return self.object
+            if user != self.object.author:
+                raise Http404("Вы можете удалять только своих клиентов")
+            return self.object
+
+class MessageListView(LoginRequiredMixin, ListView):
+    """Просмотр списка сообщений"""
+    model = Message
+
+
+class MessageCreateView(LoginRequiredMixin, CreateView):
+    """Создание сообщения"""
+    model = Message
+    form_class = MessageForm
+    success_url = reverse_lazy('mailing:message_list')
+
+
+class MailAttemptListView(LoginRequiredMixin, ListView):
+    """Просмотр списка попыток отправки"""
+    model = MailAttempt
+
+    def get_context_data(self, *args, **kwargs):
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data['all'] = context_data['object_list'].count()
+        context_data['success'] = context_data['object_list'].filter(attempt_status=True).count()
+        context_data['non-success'] = context_data['object_list'].filter(attempt_status=False).count()
+        return context_data
+
 class MainPageView(TemplateView):
     """Отображение главной страницы сервиса"""
     template_name = 'mail/main_page.html'
+
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

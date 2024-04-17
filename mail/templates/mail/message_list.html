@@ -1,0 +1,21 @@
+{% extends 'mail/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-3">
+            {% for object in object_list %}
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ object.title }}</h4>
+                </div>
+                <div class="card-body">
+                     <h4 class="my-0 font-weight-normal">{{ object.body }}</h4>
+                  </div>
+            </div>
+            {% endfor %}
+            <a class ="p-2 btn btn-outline-primary" href='{% url 'mail:message_create' %}'>
+            Добавить новое сообщение для рассылки</a>
+        </div>
+
+    </div>
+{% endblock %}

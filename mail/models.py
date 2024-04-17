@@ -8,8 +8,8 @@ NULLABLE = {'null': True, 'blank': True}
 class Client(models.Model):
     '''Получатели рассылки'''
     first_name = models.CharField(max_length=100, verbose_name='Имя')
-    last_name = models.CharField(max_length=100, verbose_name='Фамилия', **NULLABLE)
-    surname = models.CharField(max_length=100, verbose_name="Отчество")
+    last_name = models.CharField(max_length=100, verbose_name='Фамилия')
+    surname = models.CharField(max_length=100, verbose_name="Отчество", **NULLABLE)
     contact_email = models.EmailField(verbose_name='Емейл', unique=True)
     comment = models.TextField(max_length=300, verbose_name="Комментарий", help_text="Напишите уточняющую информацию",
                                **NULLABLE)
@@ -76,16 +76,16 @@ class Meta:
     verbose_name_plural = 'Рассылки'
 
 
-class Mail_attempt(models.Model):
+class MailAttempt(models.Model):
     """Попытка отправки рассылки"""
 
     STATUS_CHOICES = [
-        ('Succes', 'Успешно'),
-        ('Non-succes', 'Неуспешно')
+        ('Success', 'Успешно'),
+        ('Non-success', 'Неуспешно')
     ]
     attempt_time = models.DateTimeField(verbose_name='Дата и время последней попытки', **NULLABLE)
     attempt_status = models.CharField(max_length=20, verbose_name='Статус попытки', choices=STATUS_CHOICES,
-                                      default='Succes')
+                                      default='Success')
     server_response = models.TextField(verbose_name='Ответ почтового сервера', **NULLABLE)
 
     mailing = models.ForeignKey(Mailing, verbose_name='Рассылка', on_delete=models.CASCADE, **NULLABLE)
