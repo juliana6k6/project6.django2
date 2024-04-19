@@ -1,0 +1,28 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+
+<div class="container">
+     <form class="row" method="post" enctype="multipart/form-data">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                          Вход
+                          </div>
+                    <div class="card-body">
+                           {% csrf_token %}
+                           {{ form.as_p }}
+                       <button type="submit" class="btn btn-primary">
+                           Зарегистрироваться
+                        </button>
+                        <li> Вам нам почту будет отправлена ссылка. Перейдите по ссылке. </li>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+            </div>
+
+     </form>
+</div>
+{% endblock %}
+
+{% endblock %}
