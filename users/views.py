@@ -83,3 +83,17 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+    model = User
+    success_url = reverse_lazy('users:list_users')
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        user = self.request.user
+        if user.is_superuser:
+            return self.object
+        if user != self.object.pk:
+            raise Http404("Вы не можете удалить другого пользователя")
+        return self.object

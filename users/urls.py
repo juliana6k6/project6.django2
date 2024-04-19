@@ -2,7 +2,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
 from users.apps import UsersConfig
-from users.views import RegisterView, get_new_password, VerifyCodeView, UserUpdateView
+from users.views import RegisterView, UserUpdateView, UserDetailView, UserDeleteView,\
+     restore_access, verify
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -14,4 +15,7 @@ urlpatterns = [
      path('registration/', RegisterView.as_view(), name='register'),
      path('verify/<str:token>', verify, name='verify'),
      path('restore_access/', restore_access, name='restore'),
+     path('user_detail/', UserDetailView.as_view(), name='user_detail'),
+     path('userupdate/', UserUpdateView.as_view(), name='user_update'),
+     path('userdelete/', UserDeleteView.as_view(), name='user_delete')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

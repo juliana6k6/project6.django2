@@ -119,6 +119,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+LOGIN_URL = "/users/login"
 
 STATIC_URL = 'static/'
 
@@ -139,3 +140,17 @@ if CACHE_ENABLED:
         "LOCATION": os.getenv(CACHE_LOCATION),
     }
 }
+
+ AUTH_USER_MODEL = "users.User"
+ LOGIN_REDIRECT_URL = "/"
+ LOGOUT_REDIRECT_URL = "/"
+
+ EMAIL_HOST = 'smtp.yandex.ru'
+ EMAIL_PORT = 465
+ EMAIL_HOST_USER = os.getenv(EMAIL_HOST_USER)
+ EMAIL_HOST_PASSWORD = os.path(EMAIL_HOST_PASSWORD)
+ EMAIL_USE_TLS = False
+ EMAIL_USE_SSL = True
+
+ SERVER_EMAIL = "juliana8k@yandex.ru"
+ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
