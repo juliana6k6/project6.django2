@@ -1,18 +1,16 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
-from django.shortcuts import render
-import secrets
 import random
+import secrets
 
-from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import send_mail
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView, ListView
 
 from config import settings
-from users.forms import RegistrationForm, RecoverForm
+from users.forms import RecoverForm, RegistrationForm, UserForm
 from users.models import User
-
-from django.core.mail import send_mail
 
 
 # Create your views here.
@@ -21,7 +19,7 @@ class RegisterView(CreateView):
     form_class = RegistrationForm
 
     def get_success_url(self):
-        return reverse('users:login')
+        return reverse("users:login")
 
     def form_valid(self, form):
         user = form.save()
@@ -30,9 +28,9 @@ class RegisterView(CreateView):
         user.is_active = False
         user.save()
         host = self.request.get_host()
-        url = f'http://{host}/users/verify/{token}'
+        url = f"http://{host}/users/verify/{token}"
         message = f"Привет, для подтверждения почты тебе нужно перейти по ссылке: {url}"
-        send_mail('Верификация почты', message, settings.EMAIL_HOST_USER, [user.email])
+        send_mail("Верификация почты", message, settings.EMAIL_HOST_USER, [user.email])
         return super().form_valid(form)
 
 
@@ -44,22 +42,23 @@ def verify(request, token):
 
 
 def restore_access(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
+    if request.method == "POST":
+        email = request.POST.get("email")
         user = User.objects.get(email=email)
-        new_password = ''.join([str(random.randint(0,9)) for _ in range(8)])
+        new_password = "".join([str(random.randint(0, 9)) for _ in range(8)])
 
-        message = f'Ваш новый пароль : {new_password}'
-        send_mail('Восстановление доступа', message, settings.EMAIL_HOST_USER, [user.email])
+        message = f"Ваш новый пароль : {new_password}"
+        send_mail(
+            "Восстановление доступа", message, settings.EMAIL_HOST_USER, [user.email]
+        )
         user.set_password(new_password)
         user.save()
-        return redirect(reverse('users:login'))
+        return redirect(reverse("users:login"))
     else:
         form = RecoverForm
-        context = {
-            'form': form
-        }
-        return render(request, 'users/restore.html', context)
+        context = {"form": form}
+        return render(request, "users/restore.html", context)
+
 
 class UserListView(LoginRequiredMixin, ListView):
     model = User
@@ -79,7 +78,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserForm
-    success_url = reverse_lazy('users:profile')
+    success_url = reverse_lazy("users:profile")
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -87,7 +86,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
 class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
-    success_url = reverse_lazy('users:list_users')
+    success_url = reverse_lazy("users:list_users")
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)

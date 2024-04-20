@@ -1,15 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
-from django.shortcuts import redirect, get_object_or_404
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
+
 from blog.models import Post
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
-from django.urls import reverse_lazy
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ('title', 'body', 'preview')
+    fields = ("title", "body", "preview")
     success_url = reverse_lazy("blog:post_list")
 
     def form_valid(self, form):
@@ -25,7 +26,7 @@ class PostListView(ListView):
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
-    success_url = reverse_lazy('blog:post_list')
+    success_url = reverse_lazy("blog:post_list")
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
@@ -41,8 +42,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
-    fields = ('title', 'body', 'preview')
-
+    fields = ("title", "body", "preview")
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
@@ -52,7 +52,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         return self.object
 
     def get_success_url(self):
-        return reverse('blog:post_view', args=[self.kwargs.get('pk')])
+        return reverse("blog:post_view", args=[self.kwargs.get("pk")])
 
 
 def published_activity(request, pk):
@@ -62,4 +62,4 @@ def published_activity(request, pk):
     else:
         post_item.published = True
     post_item.save()
-    return redirect(reverse_lazy('blog:post_list'))
+    return redirect(reverse_lazy("blog:post_list"))
