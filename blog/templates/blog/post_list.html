@@ -1,0 +1,33 @@
+{% extends 'mail/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-4">
+            {% for object in object_list %}
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ object.title }}</h4>
+                </div>
+                <div class="card-body">
+                   <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li> Дата создания: {{ object.created_at }}</li>
+                        <li> Текст: {{ object.body|slice:300 }}</li></ul>
+                </div>
+                <a class="p-2 btn btn-outline-primary" href='{% url "blog:details" object.pk %}'>Посмотреть </a>
+                <a class="p-2 btn btn-outline-primary" href='{% url "blog:update" object.pk %}'>Редактировать </a>
+                <a class="p-2 btn btn-outline-primary" href='{% url "blog:delete" object.pk %}'>Удалить </a>
+
+                        {% if object.published %}
+            <a class="p-2 btn btn-outline-danger" href='{% url "blog:activity" object.pk %}'>Опубликовано </a>
+            {% else %}
+            <a class="p-2 btn btn-outline-success" href='{% url "blog:activity" object.pk %}'>Не опубликовано </a>
+            {% endif %}
+            {% endfor %}
+
+        </div>
+<div>
+             <a class="p-2 btn btn-outline-primary" href='{% url "blog:create" %}'>Создать пост </a></div>
+         </div>
+   </div>
+</div>
+{% endblock %}

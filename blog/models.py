@@ -7,7 +7,6 @@ NULLABLE = {'null': True, 'blank': True}
 
 class Post(models.Model):
     title = models.CharField(max_length=100, verbose_name="Заголовок")
-    slug = models.CharField(max_length=150, verbose_name="Слаг", **NULLABLE)
     body = models.TextField(verbose_name="Содержимое")
     created_at = models.DateField(verbose_name="Дата создания", auto_now=True)
     published = models.BooleanField(default=True, verbose_name="Опубликован")

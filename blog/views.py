@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
@@ -6,8 +7,7 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView, D
 from django.urls import reverse_lazy
 
 
-
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ('title', 'body', 'preview')
     success_url = reverse_lazy("blog:post_list")
@@ -23,7 +23,7 @@ class PostListView(ListView):
     model = Post
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     success_url = reverse_lazy('blog:post_list')
 
@@ -35,11 +35,11 @@ class PostDeleteView(DeleteView):
         return self.object
 
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     fields = ('title', 'body', 'preview')
 
