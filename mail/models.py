@@ -2,43 +2,14 @@ import datetime
 
 from django.db import models
 
+from config import settings
+from config.settings import AUTH_USER_MODEL
+
 NULLABLE = {'null': True, 'blank': True}
 
 
-class Client(models.Model):
-    '''Получатели рассылки'''
-    first_name = models.CharField(max_length=100, verbose_name='Имя')
-    last_name = models.CharField(max_length=100, verbose_name='Фамилия')
-    surname = models.CharField(max_length=100, verbose_name="Отчество", **NULLABLE)
-    contact_email = models.EmailField(verbose_name='Емейл', unique=True)
-    comment = models.TextField(max_length=300, verbose_name="Комментарий", help_text="Напишите уточняющую информацию",
-                               **NULLABLE)
-
-    def __str__(self):
-        return f'{self.last_name} {self.first_name} ({self.contact_email})'
-
-    class Meta:
-        verbose_name = 'Клиент'
-        verbose_name_plural = 'Клиенты'
-        ordering = ('last_name', 'first_name', 'contact_email')
-
-
-class Message(models.Model):
-    """Сообщение рассылки"""
-    title = models.CharField(max_length=100, verbose_name='Тема письма', default='Без темы')
-    body = models.TextField(verbose_name='Основное содержание', **NULLABLE)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = 'Сообщение'
-        verbose_name_plural = 'Сообщения'
-        ordering = ('title',)
-
-
 class Mailing(models.Model):
-    '''Настройки рассылки'''
+    """Настройки рассылки"""
     STATUS_CHOICES = [
         ('created', 'Создана'),
         ('started', 'Запущена'),
@@ -64,6 +35,8 @@ class Mailing(models.Model):
     message = models.ForeignKey(Message, verbose_name='Сообщение рассылки', on_delete=models.CASCADE, **NULLABLE)
     name = models.CharField(max_length=100, verbose_name='Название рассылки', **NULLABLE)
     is_active = models.BooleanField(verbose_name='Активность рассылки', default=True)
+    created_date = models.DateField(auto_now_add=True, verbose_name='Дата создания', **NULLABLE)
+    author = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Автор', **NULLABLE)
 
 
 def __str__(self):
@@ -74,6 +47,41 @@ def __str__(self):
 class Meta:
     verbose_name = 'Рассылка'
     verbose_name_plural = 'Рассылки'
+
+
+class Message(models.Model):
+    """Сообщение рассылки"""
+    title = models.CharField(max_length=100, verbose_name='Тема письма', default='Без темы')
+    body = models.TextField(verbose_name='Основное содержание', **NULLABLE)
+    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE,
+                                verbose_name='Настройка сообщения', **NULLABLE)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Сообщение'
+        verbose_name_plural = 'Сообщения'
+        ordering = ('title',)
+
+
+class Client(models.Model):
+    """Получатели рассылки"""
+    first_name = models.CharField(max_length=100, verbose_name='Имя')
+    last_name = models.CharField(max_length=100, verbose_name='Фамилия')
+    surname = models.CharField(max_length=100, verbose_name="Отчество", **NULLABLE)
+    contact_email = models.EmailField(verbose_name='Емейл', unique=True)
+    comment = models.TextField(max_length=300, verbose_name="Комментарий", help_text="Напишите уточняющую информацию",
+                               **NULLABLE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Автор', **NULLABLE)
+
+    def __str__(self):
+        return f'{self.last_name} {self.first_name} ({self.contact_email})'
+
+    class Meta:
+        verbose_name = 'Клиент'
+        verbose_name_plural = 'Клиенты'
+        ordering = ('last_name', 'first_name', 'contact_email')
 
 
 class MailAttempt(models.Model):
@@ -89,8 +97,7 @@ class MailAttempt(models.Model):
     server_response = models.TextField(verbose_name='Ответ почтового сервера', **NULLABLE)
 
     mailing = models.ForeignKey(Mailing, verbose_name='Рассылка', on_delete=models.CASCADE, **NULLABLE)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='клиент рассылки', **NULLABLE)
-
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Клиент рассылки', **NULLABLE)
 
     def __str__(self):
         return f'Попытка отправки рассылки {self.attempt_time}, статус - {self.attempt_status}'
@@ -98,6 +105,5 @@ class MailAttempt(models.Model):
     class Meta:
         verbose_name = 'Попытка отправки рассылки'
         verbose_name_plural = 'Попытки отправки рассылки'
-
 
 

@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, \
     TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -142,3 +142,19 @@ class MainPageView(TemplateView):
         context_data['random_posts'] = Post.objects.all()[:3]
         # три случайные статьи из блога
         return context_data
+
+
+    def toggle_status(request, pk):
+        """Позволяюет отключать и активировать рассылку"""
+        mailing = get_object_or_404(Mailing, pk=pk)
+        message_service = MessageService(mailing)
+        if mailing.status == 'STARTED' or mailing.status == 'CREATED':
+            delete_task(mailing)
+            mailing.status = 'COMPLETED'
+        else:
+            message_service.create_task()
+            mailing.status = 'STARTED'
+
+        mailing.save()
+
+        return redirect(reverse('mailing:mailing_list'))
