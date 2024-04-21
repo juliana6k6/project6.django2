@@ -7,15 +7,12 @@
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
                     <h4 class="my-0 font-weight-normal">
-                        Информация о рассылке: {{ object.name }}</h4>
+                        Информация о клиенте:</h4>
                 </div>
                 <div class="card-body">
                       <table class="table">
-                            <tr>
-                                <td>Сообщение: {{ object.message}</td>
-                             </tr>
                              <tr>
-                                <td>ФИО: {{ object.first_lastname }}</td>
+                                <td>Фамилия, Имя: {{ object.first_name }} {{ object.last_name }}</td>
                              </tr>
                                 <td> Телефон {{ object.phone_number }}</td>
                               <tr>

@@ -10,10 +10,10 @@
                 </div>
                 <div class="card-body">
 
-                 <a class="p-2 btn btn-outline-primary" href='{% url "mailing:mailing_details" object.pk %}'>Подробнее
+                 <a class="p-2 btn btn-outline-primary" href='{% url "mail:mailing_details" object.pk %}'>Подробнее
                      {% if perms.catalog.set_published and perms.catalog.change_description and perms.catalog.change_category or user == object.owner %}
-                 <a class="p-2 btn btn-outline-primary" href='{% url "mailing:mailing_update" object.pk %}'>Редактировать
-                 <a class="p-2 btn btn-outline-primary" href='{% url "mailing:mailing_delete" object.pk %}'>Удалить
+                 <a class="p-2 btn btn-outline-primary" href='{% url "mail:mailing_update" object.pk %}'>Редактировать
+                 <a class="p-2 btn btn-outline-primary" href='{% url "mail:mailing_delete" object.pk %}'>Удалить
                      {% endif %}
                   </div>
             </div>

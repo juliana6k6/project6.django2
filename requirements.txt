@@ -3,3 +3,4 @@ psycopg2==2.9.9
 pillow==10.2.0
 pytils==0.4.1
 python-dotenv-1.0.1
+django-dump-load-utf8-0.0.4

@@ -31,7 +31,7 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
 
     model = Mailing
     form_class = MailingForm
-    success_url = reverse_lazy("mailing:mailing_list")
+    success_url = reverse_lazy("mail:mailing_list")
 
     def form_valid(self, form):
         self.object = form.save()
@@ -43,7 +43,7 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
     form = Mailing
     form_class = MailingForm
-    success_url = reverse_lazy("mailing:mailing_list")
+    success_url = reverse_lazy("mail:mailing_list")
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
@@ -80,7 +80,7 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
 
     model = Client
     form_class = ClientForm
-    success_url = reverse_lazy("mailing:client_list")
+    success_url = reverse_lazy("mail:client_list")
 
 
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
@@ -88,7 +88,7 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
 
     model = Client
     form_class = ClientForm
-    success_url = reverse_lazy("mailing:client_list")
+    success_url = reverse_lazy("mail:client_list")
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
@@ -127,7 +127,7 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
 
     model = Message
     form_class = MessageForm
-    success_url = reverse_lazy("mailing:message_list")
+    success_url = reverse_lazy("mail:message_list")
 
 
 class MailAttemptListView(LoginRequiredMixin, ListView):
@@ -179,4 +179,4 @@ class MainPageView(TemplateView):
 
         mailing.save()
 
-        return redirect(reverse("mailing:mailing_list"))
+        return redirect(reverse("mail:mailing_list"))

@@ -69,7 +69,7 @@ class Mailing(models.Model):
         ("every_week", "Еженедельно"),
         ("every_month", "Ежемесячно"),
     ]
-    start_datetime_mailing = models.DateField(
+    start_datetime_mailing = models.DateTimeField(
         verbose_name="Дата и время начала отправки рассылки",
         default=datetime.datetime.now(),
     )
@@ -105,17 +105,15 @@ class Mailing(models.Model):
         AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name="Автор", **NULLABLE
     )
 
+    def __str__(self):
+        return (
+            f"{self.name}, Начало {self.start_datetime_mailing}, повтор {self.mailing_period}, "
+            f"статус {self.mailing_status}"
+        )
 
-def __str__(self):
-    return (
-        f"{self.name}, Начало {self.start_datetime_mailing}, повтор {self.mailing_period}, "
-        f"статус {self.mailing_status}"
-    )
-
-
-class Meta:
-    verbose_name = "Рассылка"
-    verbose_name_plural = "Рассылки"
+    class Meta:
+        verbose_name = "Рассылка"
+        verbose_name_plural = "Рассылки"
 
 
 class MailAttempt(models.Model):

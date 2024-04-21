@@ -9,12 +9,12 @@ from mail.views import (ClientCreateView, ClientDeleteView, ClientListView,
                         MailingDetailView, MailingListView, MailingUpdateView,
                         MainPageView, MessageCreateView, MessageListView)
 
-app_name = "mailing"
+app_name = "mail"
 
 
 urlpatterns = [
-    path("", cache_page(60)(MainPageView.as_view()), name="main_page"),
-    path("mailinglist/", MailingListView.as_view(), name="mailing_list"),
+    path("mainpage", cache_page(60)(MainPageView.as_view()), name="main_page"),
+    path("", MailingListView.as_view(), name="mailing_list"),
     path(
         "mailingdetails/<int:pk>/", MailingDetailView.as_view(), name="mailing_details"
     ),
