@@ -1,0 +1,29 @@
+{% extends 'mail/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">
+                        Клиент: {{ object }}</h4>
+                </div>
+                <div class="card-body">
+                      <table class="table">
+                            <tr>
+                                <td>Отчество: {{ object.surname}}</td>
+                             </tr>
+                             <tr>
+                                <td>Создал: {{ object.owner }}</td>
+                             </tr>
+                              <tr>
+                                <td>Комментарий: {{ object.comment }}</td>
+                             </tr>
+
+                        </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

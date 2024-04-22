@@ -10,12 +10,12 @@ from users.views import (RegisterView, UserDeleteView, UserDetailView,
 app_name = UsersConfig.name
 
 urlpatterns = [
-    path("", LoginView.as_view(template_name="users/login.html"), name="login"),
+    path("login/", LoginView.as_view(template_name="users/login.html"), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("registration/", RegisterView.as_view(), name="register"),
     path("verify/<str:token>", verify, name="verify"),
     path("restore_access/", restore_access, name="restore"),
     path("user_detail/", UserDetailView.as_view(), name="user_detail"),
-    path("userupdate/", UserUpdateView.as_view(), name="user_update"),
-    path("userdelete/", UserDeleteView.as_view(), name="user_delete"),
+    path("user_update/", UserUpdateView.as_view(), name="user_update"),
+    path("user_delete/", UserDeleteView.as_view(), name="user_delete"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
     "mail",
     "blog",
-    "users",
+    "users"
 ]
 
 MIDDLEWARE = [
@@ -128,8 +128,7 @@ USE_TZ = True
 AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
-
-LOGIN_URL = "/users/login"
+LOGIN_URL = "users:login"
 
 STATIC_URL = "static/"
 
@@ -150,10 +149,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #         "LOCATION": os.getenv(CACHE_LOCATION),
 #     }
 # }
-
-AUTH_USER_MODEL = "users.User"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
 
 EMAIL_HOST = "smtp.yandex.ru"
 EMAIL_PORT = 465

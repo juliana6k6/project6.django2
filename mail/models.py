@@ -120,15 +120,9 @@ class MailAttempt(models.Model):
     """Попытка отправки рассылки"""
 
     STATUS_CHOICES = [("Success", "Успешно"), ("Non-success", "Неуспешно")]
-    attempt_time = models.DateTimeField(
-        verbose_name="Дата и время последней попытки", **NULLABLE
-    )
-    attempt_status = models.CharField(
-        max_length=20,
-        verbose_name="Статус попытки",
-        choices=STATUS_CHOICES,
-        default="Success",
-    )
+    attempt_time = models.DateTimeField(verbose_name="Статус попытки", choices=STATUS_CHOICES,
+                                        default="Success")
+
     server_response = models.TextField(
         verbose_name="Ответ почтового сервера", **NULLABLE
     )

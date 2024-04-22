@@ -1,5 +1,5 @@
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-    <h5 class="my-0 mr-md-auto font-weight-normal">Мир рассылок >
+    <h5 class="my-0 mr-md-auto font-weight-normal"> Мир рассылок </h5>
     <nav class="ms-5">
         <a class="p-2 btn btn-outline-primary" href="{% url 'mail:mailing_list' %}">Список рассылок</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'mail:client_list' %}">Клиенты</a>
@@ -14,5 +14,6 @@
         <a class="p-2 btn btn-outline-primary" href="{% url 'users:register' %}">Регистрация</a>
         {% endif %}
         <a class="p-2 btn btn-outline-primary" href="/admin/">Админ-панель</a>
-           </nav>
+        <a class="p-2 btn btn-outline-primary" href="{% url 'blog:post_list' %}">Блог</a>
+    </nav>
 </div>

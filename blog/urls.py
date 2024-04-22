@@ -3,10 +3,11 @@ from django.conf.urls.static import static
 from django.urls import path
 from django.views.decorators.cache import cache_page
 
+from blog.apps import BlogConfig
 from blog.views import (PostCreateView, PostDeleteView, PostDetailView,
                         PostListView, PostUpdateView)
 
-app_name = "blog"
+app_name = BlogConfig.name
 
 
 urlpatterns = [

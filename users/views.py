@@ -63,12 +63,12 @@ def restore_access(request):
 class UserListView(LoginRequiredMixin, ListView):
     model = User
 
-    def get_queryset(self):
-        customer_list = super().get_queryset()
-        if self.request.user.is_bloked == True:
-            raise Http404("Вы заблокрованы")
-        else:
-            return customer_list
+    # def get_queryset(self):
+    #     customer_list = super().get_queryset()
+    #     if self.request.user.is_bloked == True:
+    #         raise Http404("Вы заблокрованы")
+    #     else:
+    #         return customer_list
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):

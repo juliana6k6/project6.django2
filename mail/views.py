@@ -95,10 +95,14 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
         user = self.request.user
         if user.groups.filter(name="Модератор").exists() or user.is_superuser:
             return self.object
-        if user != self.object.author:
+        if user != self.object.owner:
             raise Http404("Вы можете редактировать только своих клиентов")
         return self.object
 
+class ClientDetailView(LoginRequiredMixin, DetailView):
+    """Просмотр рассылки по id"""
+
+    model = Client
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
     """Удаление клиента"""
@@ -111,7 +115,7 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
         user = self.request.user
         if user.is_superuser:
             return self.object
-        if user != self.object.author:
+        if user != self.object.owner:
             raise Http404("Вы можете удалять только своих клиентов")
         return self.object
 
