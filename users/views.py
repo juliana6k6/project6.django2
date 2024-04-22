@@ -78,7 +78,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserForm
-    success_url = reverse_lazy("users:profile")
+    success_url = reverse_lazy("users:user_update")
 
     def get_object(self, queryset=None):
         return self.request.user

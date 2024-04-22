@@ -13,9 +13,8 @@
                  <a class="p-2 btn btn-outline-primary" href='{% url "mailing:client_details" object.pk %}'>Подробнее
                  <a class="p-2 btn btn-outline-primary" href='{% url "mailing:client_update" object.pk %}'>Редактировать
                  <a class="p-2 btn btn-outline-primary" href='{% url "mailing:client_delete" object.pk %}'>Удалить
-                     {% endif %}
-                  </div>
-            </div>
+                </div>
+             </div>
             {% endfor %}
             <a class ="p-2 btn btn-outline-primary" href='{% url 'mail:client_create' %}'>Добавить клиента</a>
         </div>
