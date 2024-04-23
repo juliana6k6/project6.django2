@@ -13,20 +13,15 @@
                         <li> Дата создания: {{ object.created_at }}</li>
                         <li> Текст: {{ object.body|slice:300 }}</li></ul>
                 </div>
-                <a class="p-2 btn btn-outline-primary" href='{% url "blog:details" object.pk %}'>Посмотреть </a>
-                <a class="p-2 btn btn-outline-primary" href='{% url "blog:update" object.pk %}'>Редактировать </a>
-                <a class="p-2 btn btn-outline-primary" href='{% url "blog:delete" object.pk %}'>Удалить </a>
+                <a class="p-2 btn btn-outline-primary" href='{% url "blog:post_details" object.pk %}'>Посмотреть </a>
+                <a class="p-2 btn btn-outline-primary" href='{% url "blog:post_update" object.pk %}'>Редактировать </a>
+                <a class="p-2 btn btn-outline-primary" href='{% url "blog:post_delete" object.pk %}'>Удалить </a>
 
-                        {% if object.published %}
-            <a class="p-2 btn btn-outline-danger" href='{% url "blog:activity" object.pk %}'>Опубликовано </a>
-            {% else %}
-            <a class="p-2 btn btn-outline-success" href='{% url "blog:activity" object.pk %}'>Не опубликовано </a>
-            {% endif %}
             {% endfor %}
 
         </div>
 <div>
-             <a class="p-2 btn btn-outline-primary" href='{% url "blog:create" %}'>Создать пост </a></div>
+             <a class="p-2 btn btn-outline-primary" href='{% url "blog:post_create" %}'>Создать пост </a></div>
          </div>
    </div>
 </div>

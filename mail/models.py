@@ -64,7 +64,6 @@ class Mailing(models.Model):
     ]
 
     PERIOD_CHOICES = [
-        ("once", "1 раз"),
         ("every_day", "Ежедневно"),
         ("every_week", "Еженедельно"),
         ("every_month", "Ежемесячно"),
@@ -90,7 +89,7 @@ class Mailing(models.Model):
         default="created",
     )
 
-    clients = models.ManyToManyField(Client, verbose_name="Клиенты рассылки")
+    clients = models.ManyToManyField(Client, verbose_name="Клиенты рассылки", related_name='client')
     message = models.ForeignKey(
         Message, verbose_name="Сообщение рассылки", on_delete=models.CASCADE, **NULLABLE
     )
@@ -101,7 +100,7 @@ class Mailing(models.Model):
     created_date = models.DateField(
         auto_now_add=True, verbose_name="Дата создания", **NULLABLE
     )
-    author = models.ForeignKey(
+    owner = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name="Автор", **NULLABLE
     )
 
@@ -120,9 +119,9 @@ class MailAttempt(models.Model):
     """Попытка отправки рассылки"""
 
     STATUS_CHOICES = [("Success", "Успешно"), ("Non-success", "Неуспешно")]
-    attempt_time = models.DateTimeField(verbose_name="Статус попытки", choices=STATUS_CHOICES,
-                                        default="Success")
-
+    attempt_time = models.DateTimeField(verbose_name='Дата и время последней попытки', **NULLABLE)
+    attempt_status = models.CharField(max_length=15, verbose_name='Статус попытки', choices=STATUS_CHOICES,
+                                      default="Success")
     server_response = models.TextField(
         verbose_name="Ответ почтового сервера", **NULLABLE
     )

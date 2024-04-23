@@ -10,7 +10,7 @@ from blog.models import Post
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ("title", "body", "preview")
+    fields = ("title", "body")
     success_url = reverse_lazy("blog:post_list")
 
     def form_valid(self, form):

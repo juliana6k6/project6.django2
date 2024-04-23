@@ -1,25 +1,26 @@
 {% extends 'mail/base.html' %}
 {% block content %}
-<div class="container">
-    <div class="row text-center">
-        <div class="col-3">
-            {% for object in object_list %}
-            <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">{{ object }}</h4>
-                </div>
-                <div class="card-body">
-
-                 <a class="p-2 btn btn-outline-primary" href='{% url "mail:mailing_details" object.pk %}'>Подробнее
-                     {% if perms.catalog.set_published and perms.catalog.change_description and perms.catalog.change_category or user == object.owner %}
-                 <a class="p-2 btn btn-outline-primary" href='{% url "mail:mailing_update" object.pk %}'>Редактировать
-                 <a class="p-2 btn btn-outline-primary" href='{% url "mail:mailing_delete" object.pk %}'>Удалить
-                     {% endif %}
-                  </div>
-            </div>
-            {% endfor %}
-            <a class ="p-2 btn btn-outline-primary" href='{% url 'mail:mailing_create' %}'>Добавить рассылку</a>
-        </div>
-
+{% for object in object_list %}
+<div class="card">
+    <div class="card-header">
+        <h4 class="my-0 font-weight-normal">{{ object }}</h4>
     </div>
+    <div class="card-body">
+        <div class="btn-group">
+            <a href="{% url 'mail:mailing_details' object.pk %}">
+                <button type="button" class="btn btn-sm btn-outline-primary">Подробнее</button>
+            </a>
+            <a href="{% url 'mail:mailing_update' object.pk %}">
+                <button type="button" class="btn btn-sm btn-outline-primary">Редактировать</button>
+            </a>
+            <a href="{% url 'mail:mailing_delete' object.pk %}">
+                <button type="button" class="btn btn-sm btn-outline-primary">Удалить</button>
+            </a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<div>
+    <a class="p-2 btn btn-outline-primary" href='{% url "mail:mailing_create" %}'>Добавить рассылку</a>
+</div>
 {% endblock %}

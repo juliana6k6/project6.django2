@@ -11,7 +11,7 @@
                 <div class="card-body">
                       <table class="table">
                             <tr>
-                                <td>Сообщение: {{ object.message}</td>
+                                <td>Сообщение: {{ object.message}}</td>
                              </tr>
                              <tr>
                                 <td>Автор рассылки: {{ object.owner }}</td>
@@ -26,8 +26,8 @@
                             <tr>
                                 <td>Статус рассылки: {{ object.mailing_status }}</td>
                              </tr>
-                            <tr>
-                                <td>Клиенты рассылки: {{ object.client }}</td>
+                             <tr>
+                                <td>Получатели рассылки: {{ object.clients.all }} </td>
                              </tr>
                         </table>
                 </div>

@@ -3,19 +3,16 @@
 <div class="container">
     <div class="row text-center">
         <div class="col-3">
-            {% for object in object_list %}
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">{{ object }}</h4>
+                    <h4 class="my-0 font-weight-normal">Журнал логов</h4>
                 </div>
                 <div class="card-body">
                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        <li> Дата и время последней попытки: {{ object.attempt_time }}</li>
-                        <li> Ответ сервера: {{ object.server_response }}</li>
-                        <li> Статус попытки: {{ object.attempt_status }}</li>
-                        <li> Клиент: {{ object.client }}</li>
-                        <li> Рассылка: {{ object.mailing.name }}</li></ul>
-                  </div>
+                        <li> Количество отправленных писем: {{ all }}</li>
+                        <li> Количество успешно доставленных писем: {{ Success }}</li>
+                        <li> Количество неуспешно отправленных писем: {{ Non-success }}</li>
+                </div>
             </div>
             {% endfor %}
 

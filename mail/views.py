@@ -25,7 +25,6 @@ class MailingDetailView(LoginRequiredMixin, DetailView):
 
     model = Mailing
 
-
 class MailingCreateView(LoginRequiredMixin, CreateView):
     """Создание рассылки"""
 
@@ -41,7 +40,7 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
 
 
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
-    form = Mailing
+    model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy("mail:mailing_list")
 
@@ -50,9 +49,15 @@ class MailingUpdateView(LoginRequiredMixin, UpdateView):
         user = self.request.user
         if user.groups.filter(name="Менеджер").exists() or user.is_superuser:
             return self.object
-        if user != self.object.author:
+        if user != self.object.owner:
             raise Http404("Вы можете редактировать только свои рассылки")
         return self.object
+
+    # def get_object(self, queryset=None):
+    #     self.object = super().get_object(queryset)
+    #     if not self.request.user.is_superuser or self.object.owner != self.request.user:
+    #         raise Http404
+    #     return self.object
 
 
 class MailingDeleteView(LoginRequiredMixin, DeleteView):
@@ -64,7 +69,7 @@ class MailingDeleteView(LoginRequiredMixin, DeleteView):
         user = self.request.user
         if user.is_superuser:
             return self.object
-        if user != self.object.author:
+        if user != self.object.owner:
             raise Http404("Вы можете удалить только свою подписку")
         return self.object
 
@@ -142,11 +147,11 @@ class MailAttemptListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context_data = super().get_context_data(*args, **kwargs)
         context_data["all"] = context_data["object_list"].count()
-        context_data["success"] = (
-            context_data["object_list"].filter(attempt_status=True).count()
+        context_data["Success"] = (
+            context_data["object_list"].filter(attempt_status='Success').count()
         )
-        context_data["non-success"] = (
-            context_data["object_list"].filter(attempt_status=False).count()
+        context_data["Non-success"] = (
+            context_data["object_list"].filter(attempt_status='Non-success').count()
         )
         return context_data
 
@@ -172,15 +177,12 @@ class MainPageView(TemplateView):
 
     def toggle_status(request, pk):
         """Позволяюет отключать и активировать рассылку"""
-        mailing = get_object_or_404(Mailing, pk=pk)
-        message_service = MessageService(mailing)
-        if mailing.status == "STARTED" or mailing.status == "CREATED":
-            delete_task(mailing)
-            mailing.status = "COMPLETED"
+        mailing_one = get_object_or_404(Mailing, pk=pk)
+        if mailing_one.is_active:
+            mailing_one.is_active = False
         else:
-            message_service.create_task()
-            mailing.status = "STARTED"
-
-        mailing.save()
-
+            mailing_one.is_active = True
+        mailing_one.save()
         return redirect(reverse("mail:mailing_list"))
+
+
