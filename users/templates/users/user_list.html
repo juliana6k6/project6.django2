@@ -1,24 +1,35 @@
 {% extends 'mail/base.html' %}
+
 {% block content %}
 <div class="container">
-    <div class="row text-center">
-        <div class="col-4">
-            {% for object in object_list %}
-            <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">{{ object }}</h4>
-                </div>
-                <div class="card-body">
-                   <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        <li> : {{ object.country }}</li>
-                        <li> : {{ object.phone_number}}</li></ul>
-                </div>
-                <a class="p-2 btn btn-outline-primary" href='{% url "users:user_detail" object.pk %}'>Посмотреть </a>
-                <a class="p-2 btn btn-outline-primary" href='{% url "users:user_update" object.pk %}'>Редактировать </a>
-                 <div>
-            </div>
-            {% endfor %}
-        </div>
+    <div class="col-12 mb-4">
+        <h3 align="center" style="color:Black mb-4">Пользователи:</h3>
     </div>
-<div>
+
+    <div class="row text-center">
+        {% for object in object_list %}
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header"></div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li>{{object.first_name}} {{object.last_name}} - {{object.email}};</li>
+                    </ul>
+                    <br>
+                    <div class="btn-group">
+                        {% if object.is_blocked %}
+                      <a class="p-2 btn btn-outline-danger" href='{% url "users:users_block" object.pk %}'>
+                          Убрать блокировку </a>
+                        {% else %}
+                      <a class="p-2 btn btn-outline-success" href='{% url "users:users_block" object.pk %}'>
+                          Заблокировать </a>
+                         {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}

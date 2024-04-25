@@ -1,12 +1,13 @@
 import random
 import secrets
 
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DeleteView, DetailView, UpdateView, ListView
+from django.views.generic import CreateView, DetailView, UpdateView, ListView
 
 from config import settings
 from users.forms import RecoverForm, RegistrationForm, UserForm
@@ -63,19 +64,20 @@ def restore_access(request):
 class UserListView(LoginRequiredMixin, ListView):
     model = User
 
-    # def get_queryset(self):
-    #     customer_list = super().get_queryset()
-    #     if self.request.user.is_bloked == True:
-    #         raise Http404("Вы заблокрованы")
-    #     else:
-    #         return customer_list
+    def get_queryset(self):
+        customer_list = super().get_queryset()
+        user = self.request.user
+        if user.is_blocked == True:
+            raise Http404("Вы заблокрованы")
+        else:
+            return customer_list
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
 
 
-class UserUpdateView(LoginRequiredMixin, UpdateView):
+class UserProfileView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserForm
     success_url = reverse_lazy("users:user_update")
@@ -85,15 +87,14 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
-class UserDeleteView(LoginRequiredMixin, DeleteView):
-    model = User
-    success_url = reverse_lazy("users:list_users")
+@login_required
+@permission_required('users.block_users')
+def blocked_users(request, pk):
+    user_one = get_object_or_404(User, pk=pk)
+    if user_one.is_bloсked:
+        user_one.is_bloсked = False
+    else:
+        user_one.is_bloсked = True
+    user_one.save()
+    return redirect(reverse_lazy('users:user_list'))
 
-    def get_object(self, queryset=None):
-        self.object = super().get_object(queryset)
-        user = self.request.user
-        if user.is_superuser:
-            return self.object
-        if user != self.object.pk:
-            raise Http404("Вы не можете удалить другого пользователя")
-        return self.object

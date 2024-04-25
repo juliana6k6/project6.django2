@@ -16,6 +16,11 @@
             <a href="{% url 'mail:mailing_delete' object.pk %}">
                 <button type="button" class="btn btn-sm btn-outline-primary">Удалить</button>
             </a>
+            {% if object.is_active %}
+            <a class="p-2 btn btn-outline-danger" href='{% url "mail:mailing_activity" object.pk %}'>Деактивировать </a>
+            {% else %}
+            <a class="p-2 btn btn-outline-success" href='{% url "mail:mailing_activity" object.pk %}'>Активировать </a>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -113,6 +113,9 @@ class Mailing(models.Model):
     class Meta:
         verbose_name = "Рассылка"
         verbose_name_plural = "Рассылки"
+        permissions = [
+            ('change_activity', 'Изменить aктивность рассылки'),
+        ]
 
 
 class MailAttempt(models.Model):

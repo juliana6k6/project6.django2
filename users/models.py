@@ -21,18 +21,21 @@ class User(AbstractUser):
     # verify_code = models.UUIDField(
     #     default=uuid.uuid4, verbose_name="Код вeрификации", editable=False
     # )
-    # is_bloked = models.BooleanField(
-    #     verbose_name="блокировка пользователя", default=False
-    # )
+    is_blocked = models.BooleanField(
+        verbose_name="блокировка пользователя", default=False
+    )
     comment = models.TextField(verbose_name="комментарий", **NULLABLE)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} ({self.email})'
+        return self.email
 
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
+        permissions = [
+            ('block_users', 'Заблокuровать пользователя')]
+
 
 

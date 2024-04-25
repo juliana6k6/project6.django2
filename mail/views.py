@@ -1,6 +1,7 @@
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView)
@@ -168,8 +169,10 @@ class MainPageView(TemplateView):
         # три случайные статьи из блога
         return context_data
 
-    def toggle_status(request, pk):
-        """Позволяюет отключать и активировать рассылку"""
+@login_required
+@permission_required('mailing.change_activity')
+def toggle_activity_status(request, pk):
+        """Позволяюет активировать и декативировать рассылку"""
         mailing_one = get_object_or_404(Mailing, pk=pk)
         if mailing_one.is_active:
             mailing_one.is_active = False
