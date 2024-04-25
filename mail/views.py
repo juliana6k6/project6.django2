@@ -53,12 +53,6 @@ class MailingUpdateView(LoginRequiredMixin, UpdateView):
             raise Http404("Вы можете редактировать только свои рассылки")
         return self.object
 
-    # def get_object(self, queryset=None):
-    #     self.object = super().get_object(queryset)
-    #     if not self.request.user.is_superuser or self.object.owner != self.request.user:
-    #         raise Http404
-    #     return self.object
-
 
 class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
@@ -154,7 +148,6 @@ class MailAttemptListView(LoginRequiredMixin, ListView):
             context_data["object_list"].filter(attempt_status='Non-success').count()
         )
         return context_data
-
 
 class MainPageView(TemplateView):
     """Отображение главной страницы сервиса"""

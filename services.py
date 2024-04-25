@@ -49,19 +49,19 @@ def my_job():
         for mailing in mailings:
             change_status(mailing, timenow)
             if mailing.start_datetime_mailing <= timenow <= mailing.stop_datetime_mailing:
-                for client in mailing.client.all():
+                for client in mailing.clients.all():
                     try:
                         response = send_mail(
                             subject=mailing.message.title,
                             message=mailing.message.body,
                             from_email=settings.EMAIL_HOST_USER,
-                            recipient_list=[client.email],
+                            recipient_list=[client.contact_email],
                             fail_silently=False
                         )
                         mailing_log = MailAttempt.objects.create(
                             attempt_time=mailing.start_datetime_mailing,
                             attempt_status="Success",
-                            server_response=response,
+                            server_response=True,
                             mailing=mailing,
                             client=client
                         )
@@ -72,7 +72,7 @@ def my_job():
                         mailing_log = MailAttempt.objects.create(
                             attempt_time=mailing.start_datetime_mailing,
                             attempt_status="Non-success",
-                            server_response=error,
+                            server_response=False,
                             mailing=mailing,
                             client=client
                         )
