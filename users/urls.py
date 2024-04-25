@@ -18,5 +18,6 @@ urlpatterns = [
     path("user_detail/", UserDetailView.as_view(), name="user_detail"),
     path("user_update/", UserUpdateView.as_view(), name="user_update"),
     path("user_delete/", UserDeleteView.as_view(), name="user_delete"),
+    # path("user_list/", UserListView.as_view(), name="user_list"),
     path("", LoginView.as_view(template_name="users/login.html"), name="login")
 ]

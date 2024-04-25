@@ -61,7 +61,7 @@ def my_job():
                         mailing_log = MailAttempt.objects.create(
                             attempt_time=mailing.start_datetime_mailing,
                             attempt_status="Success",
-                            server_response=True,
+                            server_response=response,
                             mailing=mailing,
                             client=client
                         )
@@ -71,13 +71,13 @@ def my_job():
                     except SMTPException as error:
                         mailing_log = MailAttempt.objects.create(
                             attempt_time=mailing.start_datetime_mailing,
-                            attempt_status="Non-success",
-                            server_response=False,
+                            attempt_status="No_success",
+                            server_response=error,
                             mailing=mailing,
                             client=client
                         )
                         mailing_log.save()
-                        print(error)
+                        print("Ошибка")
     else:
         print('no mailings')
 

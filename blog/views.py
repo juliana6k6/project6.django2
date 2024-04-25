@@ -10,7 +10,7 @@ from blog.models import Post
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ("title", "body")
+    fields = ("title", "body", "preview")
     success_url = reverse_lazy("blog:post_list")
 
     def form_valid(self, form):
@@ -39,6 +39,12 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
 
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        self.object.view_count += 1
+        self.object.save()
+        return self.object
+
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
@@ -52,7 +58,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         return self.object
 
     def get_success_url(self):
-        return reverse("blog:post_view", args=[self.kwargs.get("pk")])
+        return reverse("blog:post_details", args=[self.kwargs.get("pk")])
 
 
 def published_activity(request, pk):

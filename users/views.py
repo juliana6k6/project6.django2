@@ -81,6 +81,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("users:user_update")
 
     def get_object(self, queryset=None):
+        """редактируем текущего пользователя без передачи пк"""
         return self.request.user
 
 

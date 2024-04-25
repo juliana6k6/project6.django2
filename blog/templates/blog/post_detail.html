@@ -1,4 +1,5 @@
 {% extends 'mail/base.html' %}
+{% load my_tags %}
 {% block content %}
 <div class="container">
     <div class="row text-center">
@@ -7,11 +8,12 @@
                 <div class="card-header">
                     <h4 class="my-0 font-weight-normal">{{ object.title }}</h4>
                 </div>
+                 <img src="{{object.preview|media_filter1}}" alt='Object Image' class='img-fluid'>
                 <div class="card-body">
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         <li> Создано: {{ object.created_at }}</li>
-                        <li> Текст: {{ object.body }}</li>
-                    </ul>
+                        <li> Текст: {{ object.body }}</li></ul>
+                    <p class = 'card-text'> Просмотров: {{object.view_count}} </p>
 
                 </div>
             </div>

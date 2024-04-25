@@ -140,7 +140,7 @@ class MailAttemptListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context_data = super().get_context_data(*args, **kwargs)
-        context_data["all"] = context_data["object_list"].count()
+        context_data["all_logs"] = context_data["object_list"].count()
         context_data["Success"] = (
             context_data["object_list"].filter(attempt_status='Success').count()
         )
