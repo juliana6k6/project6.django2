@@ -79,8 +79,9 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
 class UserProfileView(LoginRequiredMixin, UpdateView):
     model = User
+    template_name = 'users/user_form1.html'
     form_class = UserForm
-    success_url = reverse_lazy("users:user_update")
+    success_url = reverse_lazy("users:user_list")
 
     def get_object(self, queryset=None):
         """редактируем текущего пользователя без передачи пк"""
