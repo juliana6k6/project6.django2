@@ -14,11 +14,11 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-
 # from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+env_path = BASE_DIR / '.env'
 # load_dotenv(BASE_DIR / '.env')
 load_dotenv(BASE_DIR / '.env')
 # Quick-start development settings - unsuitable for production
@@ -31,7 +31,6 @@ SECRET_KEY = "django-insecure-#_93-(+6q=tz$pau)4vf=zd^f5^x5d-ajyy=3k)l^k9vw#k(37
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -80,7 +79,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -92,7 +90,6 @@ DATABASES = {
         "PASSWORD": os.getenv("DATABASE_PASSWORD"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -112,7 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -123,7 +119,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -141,16 +136,15 @@ STATICFILES_DIRS = (BASE_DIR / "static/",)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# CACHE_ENABLED = os.getenv(CACHE_ENABLED) == True
-#
-# if CACHE_ENABLED:
-#
-#  CACHES = {
-#     "default": {
-#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-#         "LOCATION": os.getenv(CACHE_LOCATION),
-#     }
-# }
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') == True
+
+if CACHE_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": os.getenv('CACHE_LOCATION'),
+        }
+    }
 
 EMAIL_HOST = "smtp.yandex.ru"
 EMAIL_PORT = 465
