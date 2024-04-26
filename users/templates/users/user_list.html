@@ -1,6 +1,7 @@
 {% extends 'mail/base.html' %}
 
 {% block content %}
+{% if perms.users.view_user %}
 <div class="container">
     <div class="col-12 mb-4">
         <h3 align="center" style="color:Black mb-4">Пользователи:</h3>
@@ -17,12 +18,14 @@
                     </ul>
                     <br>
                     <div class="btn-group">
-                        {% if object.is_blocked %}
-                      <a class="p-2 btn btn-outline-danger" href='{% url "users:users_block" object.pk %}'>
+                        {% if not object.is_superuser and object != request.user %}
+                        {% if object.is_blocked == True %}
+                      <a class="p-2 btn btn-outline-danger" href='{% url "users:user_moderator" object.pk %}'>
                           Убрать блокировку </a>
                         {% else %}
-                      <a class="p-2 btn btn-outline-success" href='{% url "users:users_block" object.pk %}'>
+                      <a class="p-2 btn btn-outline-success" href='{% url "users:user_moderator" object.pk %}'>
                           Заблокировать </a>
+                         {% endif %}
                          {% endif %}
                     </div>
                 </div>
@@ -31,5 +34,5 @@
         {% endfor %}
     </div>
 </div>
-
+{% endif %}
 {% endblock %}

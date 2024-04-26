@@ -2,7 +2,7 @@ import random
 import secrets
 
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
@@ -10,7 +10,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
 
 from config import settings
-from users.forms import RecoverForm, RegistrationForm, UserForm
+from users.forms import RecoverForm, RegistrationForm, UserForm, UserModerationForm
 from users.models import User
 
 
@@ -61,8 +61,12 @@ def restore_access(request):
         return render(request, "users/restore.html", context)
 
 
-class UserListView(LoginRequiredMixin, ListView):
+class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = User
+    template_name = 'users/user_list.html'
+    permission_required = ('users.view_user',)
+
+
 
     def get_queryset(self):
         customer_list = super().get_queryset()
@@ -88,14 +92,23 @@ class UserProfileView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
-@login_required
-@permission_required('users.block_users')
-def blocked_users(request, pk):
-    user_one = get_object_or_404(User, pk=pk)
-    if user_one.is_bloсked:
-        user_one.is_bloсked = False
-    else:
-        user_one.is_bloсked = True
-    user_one.save()
-    return redirect(reverse_lazy('users:user_list'))
+# @login_required
+# @permission_required('users.block_users')
+# def blocked_users(request, pk):
+#     user_one = get_object_or_404(User, pk=pk)
+#     user_one.is_blocked = not user_one.is_blocked
+#     # if user_one.is_bloсked:
+#     #     user_one.is_bloсked = False
+#     # else:
+#     #     user_one.is_bloсked = True
+#     user_one.save()
+#     return redirect(reverse_lazy('users:user_list'))
 
+class UserModerationView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = User
+    form_class = UserModerationForm
+    template_name = 'users/user_form2.html'
+    permission_required = ('users.block_users',)
+
+    def get_success_url(self):
+        return reverse_lazy('users:user_list')

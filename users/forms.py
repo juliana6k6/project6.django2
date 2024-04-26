@@ -27,4 +27,8 @@ class UserForm(StyleFormMixin, UserChangeForm):
         self.fields["password"].widget = forms.HiddenInput()
 
 
+class UserModerationForm(StyleFormMixin, UserChangeForm):
+    class Meta:
+        model = User
+        fields = ("is_blocked",)
 
